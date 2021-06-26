@@ -1,9 +1,21 @@
-PyOpenGL #==3.1.0
-matplotlib #==1.4.2
-numpy #==1.8.2
-python-ovrsdk #==0.3.2.2
-gevent #==1.0.1
-py-getch
-mock
-serial
-arg_parser
+arg-parser==1.0.5
+future==0.18.2
+gevent==21.1.2
+greenlet==1.1.0
+matplotlib==3.4.2
+mock==4.0.3
+numpy==1.21.0
+opencv-python==4.5.2.54
+openhmd==1.0
+Pillow==8.2.0
+py-getch==1.0.1
+PyOpenGL==3.1.5
+pyparsing==2.4.7
+python-dateutil==2.8.1
+python-ovrsdk==0.3.2.2
+PyYAML==5.4.1
+serial==0.0.97
+six==1.16.0
+zope.event==4.5.0
+zope.interface==5.4.0
+
