@@ -6,6 +6,7 @@ Algorithms for manipulating OpenCV videos for use with the Oculus DK2
 import numpy as np
 import cv2
 
+
 def crop(image, _xl, _xr, _yl, _yr):
     """Crop the image based on inputs
 
@@ -25,6 +26,7 @@ def crop(image, _xl, _xr, _yl, _yr):
         _yl:height - _yr
     ]
 
+
 def create_distortion_matrix(_fx, _cx, _fy, _cy):
     """Construct distortion matrix from arguments"""
     return np.array([
@@ -32,6 +34,7 @@ def create_distortion_matrix(_fx, _cx, _fy, _cy):
         [0, _fy, _cy],
         [0, 0, 1]
     ])
+
 
 def transform(image, matrix, k1=0.22, k2=0.24):
     """Apply barrel distortion using OpenCV's Undistort operation
@@ -49,9 +52,11 @@ def transform(image, matrix, k1=0.22, k2=0.24):
         np.array([k1, k2, 0, 0, 0])
     )
 
+
 def join_images(image_left, image_right):
     """Join two images left-to-right, using Numpy"""
     return np.append(image_left, image_right, axis=1)
+
 
 def translate(image, x, y):
     """Strict linear translation, using OpenCv's warpAffine
@@ -69,6 +74,7 @@ def translate(image, x, y):
         (columns, rows)
     )
 
+
 def print_params():
     """Print out all parameters for reference"""
     strings = []
@@ -79,6 +85,7 @@ def print_params():
         ))
     string = ', '.join(strings)
     print(string)
+
 
 class Parameters():
     """Parameters for the video frame and the like

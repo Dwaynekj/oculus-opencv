@@ -7,20 +7,18 @@ import gevent
 from gevent import Greenlet
 from gevent.queue import Empty
 
-from .algos import *
+from algos import *
 
 import ovrsdk as ovr
 from time import sleep
 from numpy import interp
-from .servo import pololu as po
 
 
 class OculusDriver(Greenlet):
-    """Drive pan/tilt servos based on Oculus' orientation inputs"""
+    """Testing Oculus' orientation inputs"""
     def __init__(self, hmd, invert=False):
-        """Connect to the servo output and save HMD input"""
+        """Connect and save HMD input"""
         Greenlet.__init__(self)
-        self.servo = po.open_serial()
         self.hmd = hmd
         self.invert = 1
         if invert:
@@ -29,17 +27,11 @@ class OculusDriver(Greenlet):
 
     def kill(self):
         """Subclass the gevent kill"""
-        self.go_home()
-        self.servo.close()
         super(OculusDriver, self).kill()
 
-    def go_home(self):
-        """Move servos to home position"""
-        cmd = chr(0x84) + chr(0xA2)
-        self.servo.write(cmd)
 
     def _run(self):
-        """Interpolate orientation data and update servo positions"""
+        """Interpolate orientation data"""
         pitch_domain = [-0.3, 0.7]
         yaw_domain = [-0.7, 0.7]
         pitch_range = [0, 180]
@@ -61,8 +53,6 @@ class OculusDriver(Greenlet):
         range0 = 90
         range1 = 45
 
-        po.set_target(self.servo, 1, range0)
-        po.set_target(self.servo, 1, range1)
 
         while True:
             state = ovr.ovrHmd_GetSensorState(
@@ -77,11 +67,8 @@ class OculusDriver(Greenlet):
             range0 = map_yaw(yaw)
             range1 = map_pitch(pitch)
 
-            #print("Servo 0 set to {}, servo 1 set to {}".format(range0, range1))
-            po.set_target(self.servo, 0, range0)
-            po.set_target(self.servo, 1, range1)
-
             gevent.sleep(0)
+
 
 class CameraReader(Greenlet):
     """Read frames from a camera and apply distortions"""
@@ -126,6 +113,7 @@ class CameraReader(Greenlet):
     def __str__(self):
         return 'CameraReader for {}'.format(self.camera)
 
+
 class CameraProcessor(Greenlet):
     """Parse video frames from two queues and stitch them together.
 
@@ -160,10 +148,12 @@ class CameraProcessor(Greenlet):
                 True # color, not grayscale
             )
 
+            
     def _run(self):
         while True:
             self.iterate()
             gevent.sleep(0)
+
 
     def iterate(self):
         """Consumes frames from the queues and display
@@ -186,6 +176,7 @@ class CameraProcessor(Greenlet):
             if self.video_out:
                 self.video_out.write(composite_frame)
 
+
 class InputHandler(Greenlet):
     """Handle user input
 
@@ -204,11 +195,13 @@ class InputHandler(Greenlet):
         Greenlet.__init__(self)
         self.callback = callback
 
+
     def _run(self):
         """Greenlet method; here we loop indefinitely"""
         while True:
             self.handle_input()
             gevent.sleep(0)
+
 
     def handle_input(self):
         """Read user input and react
@@ -250,6 +243,7 @@ class InputHandler(Greenlet):
                     metric
                 ))
                 setattr(Parameters, metric, 0)
+
 
     def __str__(self):
         return 'InputHandler'

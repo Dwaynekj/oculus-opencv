@@ -21,14 +21,14 @@ from gevent import (
 
 import signal
 
-from .algos import print_params, Parameters
-from .camera import (
+from algos import print_params, Parameters
+from camera import (
     CameraReader,
     CameraProcessor,
     InputHandler,
     OculusDriver,
 )
-from .arg_parser import parser
+from arg_parser import parser
 
 monkey.patch_all()
 args = parser.parse_args()
@@ -107,7 +107,7 @@ def run():
     )
 
     if args.oculus:
-        driver = OculusDriver(hmd, invert=args.invert)
+        driver = OculusDriver(hmd)
     else:
         driver = None
 
