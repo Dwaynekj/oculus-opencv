@@ -1,6 +1,6 @@
 from unittest import TestCase
 import numpy as np
-from StringIO import StringIO
+from io import StringIO
 import sys
 
 from src.algos import *

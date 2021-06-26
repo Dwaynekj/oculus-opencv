@@ -7,12 +7,12 @@ import gevent
 from gevent import Greenlet
 from gevent.queue import Empty
 
-from algos import *
+from .algos import *
 
 import ovrsdk as ovr
 from time import sleep
 from numpy import interp
-import servo.pololu as po
+from .servo import pololu as po
 
 
 class OculusDriver(Greenlet):
